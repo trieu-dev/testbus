@@ -1,121 +1,312 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const AtelierDistroApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AtelierDistroApp extends StatelessWidget {
+  const AtelierDistroApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Atelier Distro',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF0256D2),
+          primary: const Color(0xFF0256D2),
+          surface: const Color(0xFFF7F9FF),
+          onSurface: const Color(0xFF2B333C),
+          surfaceContainerHighest: const Color(0xFFE8EEF7),
+          outlineVariant: const Color(0xFFAAB3BD),
+        ),
+        textTheme: GoogleFonts.interTextTheme(
+          const TextTheme(
+            displayLarge: TextStyle(
+              fontSize: 56,
+              fontWeight: FontWeight.bold,
+              letterSpacing: -1.5,
+              color: Color(0xFF2B333C),
+            ),
+            headlineSmall: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2B333C),
+            ),
+            bodyLarge: TextStyle(
+              fontSize: 16,
+              color: Color(0xFF2B333C),
+            ),
+            labelMedium: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF576069),
+            ),
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const DashboardScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _DashboardScreenState extends State<DashboardScreen> {
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final List<AppItemData> _apps = [
+    AppItemData(
+      title: 'Core Infrastructure',
+      subtitle: 'v4.2.0 • Stable',
+      icon: Icons.settings_input_component,
+      action: AppAction.open,
+    ),
+    AppItemData(
+      title: 'Storefront Alpha',
+      subtitle: 'Update Available',
+      icon: Icons.shopping_cart_outlined,
+      action: AppAction.update,
+    ),
+    AppItemData(
+      title: 'Metric Dash',
+      subtitle: 'v0.8.0 • New',
+      icon: Icons.bar_chart_outlined,
+      action: AppAction.open,
+    ),
+    AppItemData(
+      title: 'Device Manager',
+      subtitle: 'v2.4.1 • Up to date',
+      icon: Icons.monitor_outlined,
+      action: AppAction.open,
+    ),
+    AppItemData(
+      title: 'Analytics Hub',
+      subtitle: 'v1.0.5',
+      icon: Icons.hub_outlined,
+      action: AppAction.open,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      backgroundColor: const Color(0xFFF7F9FF),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Icon(Icons.grid_view_rounded, color: Color(0xFF576069)),
+                        Text(
+                          'ATELIER DISTRO',
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                            color: const Color(0xFF2B333C),
+                          ),
+                        ),
+                        const CircleAvatar(
+                          radius: 18,
+                          backgroundColor: Color(0xFFDAE3EF),
+                          child: Icon(Icons.person, size: 20, color: Color(0xFF576069)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 40),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Dashboard',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w800,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: AppCard(data: _apps[index]),
+                    );
+                  },
+                  childCount: _apps.length,
+                ),
+              ),
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 100), // Space for bottom nav
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      bottomNavigationBar: Container(
+        height: 80,
+        decoration: BoxDecoration(
+          color: const Color(0xFFDAE3EF).withValues(alpha: 0.8),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(0, Icons.dashboard_outlined, 'Dashboard'),
+            _buildNavItem(1, Icons.history, 'Activity'),
+            _buildNavItem(2, Icons.person_outline, 'Profile'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItem(int index, IconData icon, String label) {
+    final isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedIndex = index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: isSelected ? const Color(0xFF0256D2) : const Color(0xFF576069),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: isSelected ? const Color(0xFF0256D2) : const Color(0xFF576069),
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+enum AppAction { update, open }
+
+class AppItemData {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final AppAction action;
+
+  AppItemData({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.action,
+  });
+}
+
+class AppCard extends StatelessWidget {
+  final AppItemData data;
+
+  const AppCard({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0256D2).withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: const Color(0xFF0256D2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              data.icon,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  data.title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  data.subtitle,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        fontSize: 13,
+                        color: const Color(0xFF576069),
+                      ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          _buildActionButton(data.action),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton(AppAction action) {
+    final isUpdate = action == AppAction.update;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: isUpdate ? const Color(0xFF1A237E) : const Color(0xFF673AB7),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        isUpdate ? 'UPDATE' : 'OPEN',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.5,
+        ),
       ),
     );
   }
