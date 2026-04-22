@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'login_screen.dart';
 
 void main() {
   runApp(const AtelierDistroApp());
@@ -36,10 +37,7 @@ class AtelierDistroApp extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Color(0xFF2B333C),
             ),
-            bodyLarge: TextStyle(
-              fontSize: 16,
-              color: Color(0xFF2B333C),
-            ),
+            bodyLarge: TextStyle(fontSize: 16, color: Color(0xFF2B333C)),
             labelMedium: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -48,7 +46,7 @@ class AtelierDistroApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const DashboardScreen(),
+      home: const LoginScreen(),
     );
   }
 }
@@ -111,7 +109,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(Icons.grid_view_rounded, color: Color(0xFF576069)),
+                        const Icon(
+                          Icons.grid_view_rounded,
+                          color: Color(0xFF576069),
+                        ),
                         Text(
                           'ATELIER DISTRO',
                           style: GoogleFonts.inter(
@@ -124,7 +125,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const CircleAvatar(
                           radius: 18,
                           backgroundColor: Color(0xFFDAE3EF),
-                          child: Icon(Icons.person, size: 20, color: Color(0xFF576069)),
+                          child: Icon(
+                            Icons.person,
+                            size: 20,
+                            color: Color(0xFF576069),
+                          ),
                         ),
                       ],
                     ),
@@ -133,7 +138,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Dashboard',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(
                               fontSize: 28,
                               fontWeight: FontWeight.w800,
                             ),
@@ -147,15 +153,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: AppCard(data: _apps[index]),
-                    );
-                  },
-                  childCount: _apps.length,
-                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: AppCard(data: _apps[index]),
+                  );
+                }, childCount: _apps.length),
               ),
             ),
             const SliverToBoxAdapter(
@@ -194,15 +197,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           Icon(
             icon,
-            color: isSelected ? const Color(0xFF0256D2) : const Color(0xFF576069),
+            color: isSelected
+                ? const Color(0xFF0256D2)
+                : const Color(0xFF576069),
           ),
           const SizedBox(height: 4),
           Text(
             label,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: isSelected ? const Color(0xFF0256D2) : const Color(0xFF576069),
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                ),
+              color: isSelected
+                  ? const Color(0xFF0256D2)
+                  : const Color(0xFF576069),
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
         ],
       ),
@@ -255,11 +262,7 @@ class AppCard extends StatelessWidget {
               color: const Color(0xFF0256D2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              data.icon,
-              color: Colors.white,
-              size: 24,
-            ),
+            child: Icon(data.icon, color: Colors.white, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -269,17 +272,17 @@ class AppCard extends StatelessWidget {
                 Text(
                   data.title,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   data.subtitle,
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        fontSize: 13,
-                        color: const Color(0xFF576069),
-                      ),
+                    fontSize: 13,
+                    color: const Color(0xFF576069),
+                  ),
                 ),
               ],
             ),
