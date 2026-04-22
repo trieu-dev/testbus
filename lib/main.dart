@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
+
+  // Initialize the GoogleSignIn singleton once at startup.
+  await GoogleSignIn.instance.initialize(
+    serverClientId: dotenv.env['GOOGLE_SERVER_CLIENT_ID'],
+  );
+
   runApp(const AtelierDistroApp());
 }
 
