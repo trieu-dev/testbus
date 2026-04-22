@@ -1,9 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'main.dart';
 
-class LoginScreen extends StatelessWidget {
+// IMPORTANT: GoogleSignIn() constructor is REMOVED in v7.x.
+// We must use GoogleSignIn.instance singleton initialized in main.dart.
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool _isSigningIn = false;
+
+  Future<void> _handleSignIn() async {
+    setState(() {
+      _isSigningIn = true;
+    });
+
+    try {
+      // Step 1: Authentication (ID Token)
+      final googleUser = await GoogleSignIn.instance.authenticate();
+
+      debugPrint('Signed in as: ${googleUser.displayName}');
+
+      // Step 2: Authorization (Access Token for Drive API)
+      final scopes = [
+        drive.DriveApi.driveFileScope,
+        drive.DriveApi.driveAppdataScope,
+      ];
+
+      final authorization = await googleUser.authorizationClient
+          .authorizeScopes(scopes);
+
+      // Step 3: Initialize Drive API
+      final httpClient = authorization.authClient(scopes: scopes);
+      final driveApi = drive.DriveApi(httpClient);
+      debugPrint('Google Drive API initialized with: $driveApi');
+
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+        );
+      }
+    } catch (error) {
+      debugPrint('Sign in failed: $error');
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Sign in failed: $error')));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSigningIn = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +118,9 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 80),
               // Sign In Button
-              _buildGoogleSignInButton(context),
+              _isSigningIn
+                  ? const CircularProgressIndicator(color: Color(0xFF1e40af))
+                  : _buildGoogleSignInButton(context),
               const SizedBox(height: 24),
               Text(
                 'By signing in, you agree to our Terms and Conditions.',
@@ -79,11 +140,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildGoogleSignInButton(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const DashboardScreen()),
-        );
-      },
+      onTap: _handleSignIn,
       borderRadius: BorderRadius.circular(30),
       child: Container(
         height: 60,
@@ -93,55 +150,28 @@ class LoginScreen extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: const Color(0xFF1e40af).withValues(alpha: 0.3),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
             ),
           ],
         ),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: const BoxDecoration(
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/google_logo.png', height: 24, width: 24),
+              const SizedBox(width: 12),
+              Text(
+                'Sign in with Google',
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                   color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Image.asset(
-                    'assets/google_logo.png',
-                    width: 24,
-                    height: 24,
-                    errorBuilder: (context, error, stackTrace) => const Icon(
-                      Icons.g_mobiledata,
-                      color: Color(0xFF4285F4),
-                      size: 32,
-                    ),
-                  ),
+                  letterSpacing: 0.5,
                 ),
               ),
-            ),
-            const Expanded(
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 54,
-                  ), // Center text accounting for the logo
-                  child: Text(
-                    'Sign in with Google',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
