@@ -49,11 +49,16 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (error) {
+      if (error is GoogleSignInException && error.code == GoogleSignInExceptionCode.canceled) {
+        debugPrint('Sign in was canceled by the user.');
+        return;
+      }
+      
       debugPrint('Sign in failed: $error');
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Sign in failed: $error')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign in failed: $error')),
+        );
       }
     } finally {
       if (mounted) {
