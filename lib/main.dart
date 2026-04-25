@@ -15,6 +15,9 @@ void main() async {
     serverClientId: dotenv.env['GOOGLE_SERVER_CLIENT_ID'],
   );
 
+  // Prevent GoogleFonts from trying to download anything (Fixes SocketException)
+  GoogleFonts.config.allowRuntimeFetching = true;
+
   runApp(const AtelierDistroApp());
 }
 
