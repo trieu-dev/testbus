@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'main.dart';
 
 // IMPORTANT: GoogleSignIn() constructor is REMOVED in v7.x.
@@ -69,6 +71,17 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  Future<void> _launchURL(String urlString) async {
+    final url = Uri.parse(urlString);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch $urlString')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,14 +140,49 @@ class _LoginScreenState extends State<LoginScreen> {
                   ? const CircularProgressIndicator(color: Color(0xFF1e40af))
                   : _buildGoogleSignInButton(context),
               const SizedBox(height: 24),
-              Text(
-                'By signing in, you agree to our Terms and Conditions.',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.inter(
-                  fontSize: 11,
-                  color: const Color(0xFF576069).withValues(alpha: 0.7),
-                  height: 1.5,
-                ),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 4,
+                children: [
+                  Text(
+                    'By signing in, you agree to our',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: const Color(0xFF576069).withValues(alpha: 0.7),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => _launchURL(dotenv.env['TERMS_URL'] ?? ''),
+                    child: Text(
+                      'Terms and Conditions',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        color: const Color(0xFF1e40af),
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'and',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: const Color(0xFF576069).withValues(alpha: 0.7),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => _launchURL(dotenv.env['PRIVACY_POLICY_URL'] ?? ''),
+                    child: Text(
+                      'Privacy Policy',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        color: const Color(0xFF1e40af),
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

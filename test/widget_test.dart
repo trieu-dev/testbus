@@ -13,8 +13,8 @@ import 'package:testbus/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const AtelierDistroApp());
-    expect(find.text('ATELIER DISTRO'), findsOneWidget);
+    await tester.pumpWidget(const TestBusApp());
+    expect(find.text('TESTBUS'), findsOneWidget);
     expect(find.text('Core Infrastructure'), findsOneWidget);
   });
 }
