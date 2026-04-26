@@ -18,16 +18,16 @@ void main() async {
   // Prevent GoogleFonts from trying to download anything (Fixes SocketException)
   GoogleFonts.config.allowRuntimeFetching = true;
 
-  runApp(const AtelierDistroApp());
+  runApp(const TestBusApp());
 }
 
-class AtelierDistroApp extends StatelessWidget {
-  const AtelierDistroApp({super.key});
+class TestBusApp extends StatelessWidget {
+  const TestBusApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Atelier Distro',
+      title: 'TestBus',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -129,7 +129,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           color: Color(0xFF576069),
                         ),
                         Text(
-                          'ATELIER DISTRO',
+                          'TESTBUS',
                           style: GoogleFonts.inter(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
